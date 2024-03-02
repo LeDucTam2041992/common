@@ -65,6 +65,12 @@ public class HttpSecurityConfiguration {
     }
 
     @Bean
+    @Order(22)
+    public HttpSecurityConfigurer prometheusConfig() {
+        return new PrometheusSecurityConfigurer();
+    }
+
+    @Bean
     @ConditionalOnProperty(
             name = "kpro.security.default.enable",
             havingValue = "true",

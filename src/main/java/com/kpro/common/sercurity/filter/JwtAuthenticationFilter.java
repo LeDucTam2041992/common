@@ -56,7 +56,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        return request.getHeader("internal-token");
+        var internalToken = request.getHeader("internal-token").trim();
+        log.info("{} internal token: {}", getClass().getSimpleName(), internalToken);
+        return internalToken.split(" ")[1];
     }
 
 }
