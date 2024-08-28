@@ -27,13 +27,14 @@ public class FunctionalAccessControlImpl implements FunctionalAccessControl {
     }
 
     @Override
-    public boolean doCheckPermission(String username, String serviceName, String permission) {
-        log.info("{} check permission {} - {} - {}", getClass().getSimpleName(), username, serviceName, permission);
-        if (username == null || serviceName == null || permission == null) return false;
+    public boolean doCheckPermission(String username, String resource, String function, String action) {
+        log.info("{} check permission {} - {} - {}", getClass().getSimpleName(), username, resource,
+            function);
+        if (username == null || resource == null || function == null) return false;
         try {
             String urlCheck = UriComponentsBuilder.fromHttpUrl(urlCheckPermission).encode().toUriString();
             Map<String, String> params = new HashMap<>();
-            params.put("permission", String.join("_", serviceName, permission));
+            params.put("permission", String.join("_", resource, function, action));
             params.put("username", username);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);

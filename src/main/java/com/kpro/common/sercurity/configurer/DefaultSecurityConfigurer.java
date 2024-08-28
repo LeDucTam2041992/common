@@ -4,7 +4,10 @@ import jakarta.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 public class DefaultSecurityConfigurer implements HttpSecurityConfigurer {
     private static final Logger log = LoggerFactory.getLogger(DefaultSecurityConfigurer.class);
@@ -19,6 +22,7 @@ public class DefaultSecurityConfigurer implements HttpSecurityConfigurer {
         try {
             log.info("{} start create configurer", getClass().getSimpleName());
             httpSecurity
+//                    .addFilterBefore(filter, BasicAuthenticationFilter.class)
                     .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                     .authorizeHttpRequests(
                             authorizationManagerRequestMatcherRegistry ->

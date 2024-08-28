@@ -21,7 +21,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         this.functionalAccessControl = functionalAccessControl;
     }
 
-    public boolean checkPermission(String serviceName, String permission) {
+    public boolean checkPermission(String resource, String function, String action) {
         String username;
         var authentication = this.getAuthentication();
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
@@ -36,7 +36,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
                 username = (String) this.getAuthentication().getPrincipal();
             }
         }
-        return this.functionalAccessControl.doCheckPermission(username, serviceName, permission);
+        return this.functionalAccessControl.doCheckPermission(username, resource, function, action);
     }
 
     @Override
