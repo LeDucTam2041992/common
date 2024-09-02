@@ -34,7 +34,7 @@ public interface AwsFileService {
 
     URL getStaticObjectURL(String keyName);
 
-    PutObjectResult uploadToStaticBucket(String keyName, String mediaType, InputStream inputStream);
+    PutObjectResult uploadToStaticBucket(String keyName, String mediaType, InputStream inputStream, long size);
 
     Object uploadMediaFile(String fileName, MultipartFile file) throws IOException;
 

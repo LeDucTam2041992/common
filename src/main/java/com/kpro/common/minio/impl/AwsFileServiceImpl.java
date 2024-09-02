@@ -132,10 +132,11 @@ public class AwsFileServiceImpl implements AwsFileService {
         return this.amazonS3.getUrl(staticBucketName, keyName);
     }
 
-    public PutObjectResult uploadToStaticBucket(String keyName, String mediaType, InputStream inputStream) {
+    public PutObjectResult uploadToStaticBucket(String keyName, String mediaType, InputStream inputStream, long size) {
         String staticBucketName = this.awsS3Config.getBucket().concat("-statics-resource");
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentType(mediaType);
+        meta.setContentLength(size);
         PutObjectRequest putObjectRequest = (new PutObjectRequest(staticBucketName, keyName, inputStream, meta)).withCannedAcl(CannedAccessControlList.PublicRead);
         return this.amazonS3.putObject(putObjectRequest);
     }
