@@ -10,11 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
     private static final Logger log = LoggerFactory.getLogger(CustomMethodSecurityExpressionRoot.class);
-    private FunctionalAccessControl functionalAccessControl;
+    private static final String ADMIN = "tamld";
+    private final FunctionalAccessControl functionalAccessControl;
     private Object filterObject;
     private Object returnObject;
     private Object target;
-    private static final String ADMIN = "tamld";
 
     public CustomMethodSecurityExpressionRoot(Authentication authentication, FunctionalAccessControl functionalAccessControl) {
         super(authentication);
@@ -40,23 +40,23 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     @Override
-    public void setFilterObject(Object filterObject) {
-        this.filterObject = filterObject;
-    }
-
-    @Override
     public Object getFilterObject() {
         return this.filterObject;
     }
 
     @Override
-    public void setReturnObject(Object returnObject) {
-        this.returnObject = returnObject;
+    public void setFilterObject(Object filterObject) {
+        this.filterObject = filterObject;
     }
 
     @Override
     public Object getReturnObject() {
         return this.returnObject;
+    }
+
+    @Override
+    public void setReturnObject(Object returnObject) {
+        this.returnObject = returnObject;
     }
 
     @Override

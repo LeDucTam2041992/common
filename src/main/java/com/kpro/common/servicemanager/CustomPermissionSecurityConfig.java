@@ -17,22 +17,19 @@ import org.springframework.web.client.RestTemplate;
 @EnableConfigurationProperties(AccessControlConfig.class)
 public class CustomPermissionSecurityConfig extends GlobalMethodSecurityConfiguration {
 
-    @Autowired
-    @Lazy
-    FunctionalAccessControl functionalAccessControl;
+  @Autowired @Lazy FunctionalAccessControl functionalAccessControl;
 
-    public CustomPermissionSecurityConfig() {
-    }
+  public CustomPermissionSecurityConfig() {}
 
-    @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler() {
-        return new CustomMethodSecurityExpressionHandler(functionalAccessControl);
-    }
+  @Override
+  protected MethodSecurityExpressionHandler createExpressionHandler() {
+    return new CustomMethodSecurityExpressionHandler(functionalAccessControl);
+  }
 
-    @Bean({"functionalAccessControlDefault"})
-    @ConditionalOnMissingBean
-    public FunctionalAccessControl functionalAccessControlDefault(@Qualifier("interRestTemplate") RestTemplate interRestTemplate, AccessControlConfig config) {
-        return new FunctionalAccessControlImpl(interRestTemplate, config.getUrlCheckPermission());
-    }
-
+  @Bean({"functionalAccessControlDefault"})
+  @ConditionalOnMissingBean
+  public FunctionalAccessControl functionalAccessControlDefault(
+      @Qualifier("interRestTemplate") RestTemplate interRestTemplate, AccessControlConfig config) {
+    return new FunctionalAccessControlImpl(interRestTemplate, config.getUrlCheckPermission());
+  }
 }

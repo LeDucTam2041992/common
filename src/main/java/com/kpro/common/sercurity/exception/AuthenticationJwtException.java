@@ -1,24 +1,28 @@
 package com.kpro.common.sercurity.exception;
 
 import com.kpro.common.exception.BaseException;
-import lombok.Data;
+import com.kpro.common.exception.KproErrorCode;
 
-@Data
 public class AuthenticationJwtException extends BaseException {
-    private String principal;
+  private String principal;
 
-    public AuthenticationJwtException() {
-    }
+  public AuthenticationJwtException() {}
 
-    public AuthenticationJwtException(String errorCode) {
-        super(errorCode);
-    }
+  public AuthenticationJwtException(KproErrorCode errorCode) {
+    super(errorCode);
+  }
 
-    public AuthenticationJwtException(String errorCode, String desc) {
-        super(errorCode, desc);
-    }
+  public AuthenticationJwtException(KproErrorCode errorCode, Object... args) {
+    super(errorCode, args);
+  }
 
-    public AuthenticationJwtException(String errorCode, Object tag) {
-        super(errorCode, tag);
-    }
+  public AuthenticationJwtException(KproErrorCode errorCode, String principal) {
+    super(errorCode);
+    this.principal = principal;
+  }
+
+  public AuthenticationJwtException(KproErrorCode errorCode, String principal, Object... args) {
+    super(errorCode, args);
+    this.principal = principal;
+  }
 }

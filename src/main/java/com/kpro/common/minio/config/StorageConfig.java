@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Import;
 @Import(AwsS3Config.class)
 public class StorageConfig {
 
-    @Bean
-    @ConditionalOnBean(value = AmazonS3.class)
-    public AwsFileService awsFileService(final AwsS3Config awsS3Config, final AmazonS3 amazonS3) {
-        return new AwsFileServiceImpl(awsS3Config, amazonS3);
-    }
+  @Bean
+  @ConditionalOnBean(value = AmazonS3.class)
+  public AwsFileService awsFileService(final AwsS3Config awsS3Config, final AmazonS3 amazonS3) {
+    return new AwsFileServiceImpl(awsS3Config, amazonS3);
+  }
 }

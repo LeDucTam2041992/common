@@ -3,70 +3,43 @@ package com.kpro.common.exception;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.http.HttpStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"errorObject", "tagObject"})
+@JsonPropertyOrder({"errorObject"})
 public class BaseException extends RuntimeException {
-    private ErrorObject errorObject;
-    private Object tagObject;
 
-    public BaseException() {
-        super();
-        this.setErrorObject(new ErrorObject());
-    }
+  private KproErrorCode errorCode;
+  private Object[] args;
+  private Object tag;
 
-    public BaseException(String errorCode) {
-        this.setErrorObject(ErrorHelper.buildResponse(errorCode));
-    }
+  public BaseException() {}
 
-    public BaseException(String errorCode, Object tag) {
-        this(errorCode);
-        this.setTagObject(tag);
-    }
+  public BaseException(KproErrorCode errorCode) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
+  }
 
-    public BaseException(ErrorObject errorObject, Object tag) {
-        this.errorObject = errorObject;
-        this.tagObject = tag;
-    }
+  public BaseException(KproErrorCode errorCode, Object... args) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
+    this.args = args;
+  }
 
-    public BaseException(ErrorObject errorObject) {
-        this.errorObject = errorObject;
-    }
+  public KproErrorCode getErrorCode() {
+    return errorCode;
+  }
 
-    public BaseException(String message, ErrorObject errorObject) {
-        super(message);
-        this.errorObject = errorObject;
-    }
+  public Object[] getArgs() {
+    return args;
+  }
 
-    public BaseException(String message, Throwable cause, ErrorObject errorObject) {
-        super(message, cause);
-        this.errorObject = errorObject;
-    }
+  public Object getTag() {
+    return tag;
+  }
 
-    public BaseException(Throwable cause, ErrorObject errorObject) {
-        super(cause);
-        this.errorObject = errorObject;
-    }
-
-    public BaseException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, ErrorObject errorObject) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        this.errorObject = errorObject;
-    }
-
-    public ErrorObject getErrorObject() {
-        return errorObject;
-    }
-
-    public void setErrorObject(ErrorObject errorObject) {
-        this.errorObject = errorObject;
-    }
-
-    public Object getTagObject() {
-        return tagObject;
-    }
-
-    public void setTagObject(Object tagObject) {
-        this.tagObject = tagObject;
-    }
+  public HttpStatus getStatus() {
+    return HttpStatus.BAD_REQUEST;
+  }
 }

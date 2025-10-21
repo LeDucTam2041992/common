@@ -4,40 +4,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ApiMessage {
 
-    @Schema(example = "SUCCESS")
-    private String code;
-    @Schema(example = "SUCCESS")
-    private String message;
+  @Schema(example = "SUCCESS")
+  private String code;
 
-    public ApiMessage() {
-    }
+  @Schema(example = "SUCCESS")
+  private String message;
 
-    public ApiMessage(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
+  public ApiMessage() {}
 
-    public String getCode() {
-        return code;
-    }
+  public ApiMessage(String code, String message) {
+    this.code = code;
+    this.message = message;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    @Override
-    public String toString() {
-        return "ApiMessage{" +
-                "code='" + code + '\'' +
-                ", message='" + message + '\'' +
-                '}';
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  @Override
+  public String toString() {
+    return "ApiMessage{" + "code='" + code + '\'' + ", message='" + message + '\'' + '}';
+  }
 }

@@ -1,13 +1,13 @@
-//package com.kpro.common;
+// package com.kpro.common;
 //
-//import org.springframework.boot.SpringApplication;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
+// import org.springframework.boot.SpringApplication;
+// import org.springframework.boot.autoconfigure.SpringBootApplication;
 //
-//@SpringBootApplication
-//public class CommonApplication {
+// @SpringBootApplication
+// public class CommonApplication {
 //
 //	public static void main(String[] args) {
 //		SpringApplication.run(CommonApplication.class, args);
 //	}
 //
-//}
+// }

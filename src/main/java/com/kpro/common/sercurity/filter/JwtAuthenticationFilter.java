@@ -1,11 +1,15 @@
 package com.kpro.common.sercurity.filter;
 
 import com.kpro.common.sercurity.config.PublicPathConfigProperties;
-import com.kpro.common.sercurity.utils.InternalTokenUtils;
+import com.kpro.common.sercurity.utils.TokenManager;
+import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,51 +18,55 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final InternalTokenUtils tokenValidator;
-    private final Set<AntPathRequestMatcher> excludedMatchers;
+  private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+  private final TokenManager tokenManager;
+  private final Set<AntPathRequestMatcher> excludedMatchers;
 
-    public JwtAuthenticationFilter(InternalTokenUtils tokenValidator, PublicPathConfigProperties configProperties) {
-        this.tokenValidator = tokenValidator;
-        this.excludedMatchers = configProperties.getPaths().stream().map(AntPathRequestMatcher::new).collect(Collectors.toSet());
+  public JwtAuthenticationFilter(
+      TokenManager tokenManager, PublicPathConfigProperties configProperties) {
+    this.tokenManager = tokenManager;
+    this.excludedMatchers =
+        configProperties.getPaths().stream()
+            .map(AntPathRequestMatcher::new)
+            .collect(Collectors.toSet());
+  }
+
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    String jwt = getJwtFromRequest(request);
+    if (jwt == null || notFilter(request)) {
+      filterChain.doFilter(request, response);
+      return;
     }
+    JWTClaimsSet claimsSet = tokenManager.validateInternalJwt(jwt);
+    String principal = claimsSet.getSubject();
+    UsernamePasswordAuthenticationToken authentication =
+        new UsernamePasswordAuthenticationToken(principal, null, null);
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    filterChain.doFilter(request, response);
+  }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
-            String jwt = getJwtFromRequest(request);
+  //    @Override
+  //    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+  //        log.info("Not filter public path [{}]", request.getRequestURI());
+  //        return excludedMatchers.stream()
+  //            .anyMatch(matcher -> matcher.matches(request));
+  //    }
 
-            String principal = tokenValidator.validateInternalJwt(jwt);
+  private boolean notFilter(HttpServletRequest request) {
+    log.info("Not filter public path [{}]", request.getRequestURI());
+    return excludedMatchers.stream().anyMatch(matcher -> matcher.matches(request));
+  }
 
-            UsernamePasswordAuthenticationToken
-                    authentication = new UsernamePasswordAuthenticationToken(principal, null, null);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        } catch (Exception ex) {
-            log.error("error message", ex);
-        }
-        filterChain.doFilter(request, response);
+  private String getJwtFromRequest(HttpServletRequest request) {
+    var token = request.getHeader("authorization");
+    if (token != null && token.startsWith("Bearer ")) {
+      return token.substring("Bearer ".length());
     }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return excludedMatchers.stream()
-                .anyMatch(matcher -> matcher.matches(request));
-    }
-
-    private String getJwtFromRequest(HttpServletRequest request) {
-        var internalToken = request.getHeader("internal-token").trim();
-        log.info("{} internal token: {}", getClass().getSimpleName(), internalToken);
-        return internalToken.split(" ")[1];
-    }
-
+    return null;
+  }
 }
