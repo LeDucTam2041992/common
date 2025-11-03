@@ -56,14 +56,13 @@ public class CommunicationConfig {
   @ConditionalOnMissingBean(name = "internalHttpRequestFactory")
   public ClientHttpRequestFactory internalHttpRequestFactory(
       InternalHttpClientProperties clientProperties) {
-    HttpClientBuilder builder =
-        HttpClients.custom()
-            .disableAuthCaching()
-            .disableConnectionState()
-            .disableCookieManagement();
+    HttpClientBuilder builder = HttpClients.custom();
+
     if (clientProperties.isUseSystemProperties()) {
       builder.useSystemProperties();
     }
+
+    builder.disableAuthCaching().disableConnectionState().disableCookieManagement();
 
     PoolingHttpClientConnectionManagerBuilder poolingHttpClientConnectionManagerBuilder =
         PoolingHttpClientConnectionManagerBuilder.create();
@@ -82,8 +81,8 @@ public class CommunicationConfig {
 
     poolingHttpClientConnectionManagerBuilder.setDefaultConnectionConfig(
         ConnectionConfig.custom()
-            .setConnectTimeout(10, TimeUnit.SECONDS)
-            .setSocketTimeout(15, TimeUnit.SECONDS)
+            .setConnectTimeout(clientProperties.getConnectTimeout(), TimeUnit.SECONDS)
+            .setSocketTimeout(clientProperties.getSocketTimeOut(), TimeUnit.SECONDS)
             .setTimeToLive(clientProperties.getConnTimeToLive(), TimeUnit.MINUTES)
             .build());
 
@@ -91,8 +90,9 @@ public class CommunicationConfig {
 
     RequestConfig requestConfig =
         RequestConfig.custom()
-            .setResponseTimeout(Timeout.ofMilliseconds(30_000))
-            .setConnectionRequestTimeout(Timeout.ofMilliseconds(5_000))
+            .setResponseTimeout(Timeout.ofSeconds(clientProperties.getResponseTimeout()))
+            .setConnectionRequestTimeout(
+                Timeout.ofSeconds(clientProperties.getConnectionRequestTimeout()))
             .build();
 
     builder.setDefaultRequestConfig(requestConfig);

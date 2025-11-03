@@ -14,6 +14,12 @@ public class InternalHttpClientProperties {
   private int maxConnPerRoute = 20;
   private long connTimeToLive = 15;
 
+  private long connectTimeout = 10;
+  private int socketTimeOut = 15;
+
+  private long responseTimeout = 45;
+  private long connectionRequestTimeout = 5;
+
   private boolean evictExpiredConnections = true;
   private boolean evictIdleConnections = true;
   private long maxIdleTime = 60;
@@ -143,5 +149,37 @@ public class InternalHttpClientProperties {
 
   public void setBlacklistedHeader(List<String> blacklistedHeader) {
     this.blacklistedHeader = blacklistedHeader;
+  }
+
+  public long getConnectTimeout() {
+    return connectTimeout;
+  }
+
+  public void setConnectTimeout(long connectTimeout) {
+    this.connectTimeout = connectTimeout;
+  }
+
+  public int getSocketTimeOut() {
+    return socketTimeOut;
+  }
+
+  public void setSocketTimeOut(int socketTimeOut) {
+    this.socketTimeOut = socketTimeOut;
+  }
+
+  public long getResponseTimeout() {
+    return responseTimeout;
+  }
+
+  public void setResponseTimeout(long responseTimeout) {
+    this.responseTimeout = responseTimeout;
+  }
+
+  public long getConnectionRequestTimeout() {
+    return connectionRequestTimeout;
+  }
+
+  public void setConnectionRequestTimeout(long connectionRequestTimeout) {
+    this.connectionRequestTimeout = connectionRequestTimeout;
   }
 }
