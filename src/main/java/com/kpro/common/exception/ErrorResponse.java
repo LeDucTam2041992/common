@@ -7,37 +7,37 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"errorCode", "errorDesc", "errorMessage"})
+@JsonPropertyOrder({"code", "desc", "errorMessage"})
 public class ErrorResponse {
-  private String errorCode;
-  private String errorDesc;
+  private String code;
+  private String desc;
   private Map<String, String> errorMessage;
   private Object tagObject;
 
   public ErrorResponse(
-      String errorCode, String errorDesc, Map<String, String> errorMessage, Object tagObject) {
-    this.errorCode = errorCode;
-    this.errorDesc = errorDesc;
+      String code, String desc, Map<String, String> errorMessage, Object tagObject) {
+    this.code = code;
+    this.desc = desc;
     this.errorMessage = errorMessage;
     this.tagObject = tagObject;
   }
 
   public ErrorResponse() {}
 
-  public String getErrorCode() {
-    return errorCode;
+  public String getCode() {
+    return code;
   }
 
-  public void setErrorCode(String errorCode) {
-    this.errorCode = errorCode;
+  public void setCode(String code) {
+    this.code = code;
   }
 
-  public String getErrorDesc() {
-    return errorDesc;
+  public String getDesc() {
+    return desc;
   }
 
-  public void setErrorDesc(String errorDesc) {
-    this.errorDesc = errorDesc;
+  public void setDesc(String desc) {
+    this.desc = desc;
   }
 
   public Map<String, String> getErrorMessage() {
@@ -60,10 +60,10 @@ public class ErrorResponse {
   public String toString() {
     return "ErrorObject{"
         + "errorCode='"
-        + errorCode
+        + code
         + '\''
         + ", errorDesc='"
-        + errorDesc
+        + desc
         + '\''
         + ", errorMessage="
         + errorMessage
