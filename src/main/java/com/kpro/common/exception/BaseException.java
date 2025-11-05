@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 public class BaseException extends RuntimeException {
 
   private KproErrorCode errorCode;
-  private Object[] args;
   private Object tag;
+  private Object[] args;
 
   public BaseException() {}
 
@@ -27,16 +27,41 @@ public class BaseException extends RuntimeException {
     this.args = args;
   }
 
+  public BaseException(KproErrorCode errorCode, Object tag) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
+    this.tag = tag;
+  }
+
+  public BaseException(KproErrorCode errorCode, Object tag, Object... args) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
+    this.tag = tag;
+    this.args = args;
+  }
+
   public KproErrorCode getErrorCode() {
     return errorCode;
+  }
+
+  public void setErrorCode(KproErrorCode errorCode) {
+    this.errorCode = errorCode;
   }
 
   public Object[] getArgs() {
     return args;
   }
 
+  public void setArgs(Object[] args) {
+    this.args = args;
+  }
+
   public Object getTag() {
     return tag;
+  }
+
+  public void setTag(Object tag) {
+    this.tag = tag;
   }
 
   public HttpStatus getStatus() {

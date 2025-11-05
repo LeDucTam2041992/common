@@ -48,7 +48,7 @@ public class RSAJWSAlgorithmProvider implements JWSProvider {
       PrivateKey privateKey = factory.generatePrivate(spec);
       return new RSASSASigner(privateKey);
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      log.error("{} generate internal token error {}", getClass().getSimpleName(), e);
+      log.error("{} get signer error {}", getClass().getSimpleName(), e);
       throw new AuthenticationJwtException();
     }
   }
