@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       TokenManager tokenManager, PublicPathConfigProperties configProperties) {
     this.tokenManager = tokenManager;
     this.excludedMatchers =
-        configProperties.getPaths().stream()
+        configProperties.getPublicPaths().stream()
             .map(AntPathRequestMatcher::new)
             .collect(Collectors.toSet());
   }

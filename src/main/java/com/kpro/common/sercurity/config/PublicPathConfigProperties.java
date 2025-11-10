@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "kpro.security.public-path")
+@ConfigurationProperties(prefix = "kpro.security")
 public class PublicPathConfigProperties {
-  private List<String> paths = new ArrayList<>();
+  private List<String> publicPaths = new ArrayList<>();
 
   public PublicPathConfigProperties() {}
 
-  public PublicPathConfigProperties(List<String> paths) {
-    this.paths = paths;
+  public PublicPathConfigProperties(List<String> publicPaths) {
+    this.publicPaths = publicPaths;
   }
 
-  public List<String> getPaths() {
-    return paths;
+  public List<String> getPublicPaths() {
+    return publicPaths;
   }
 
-  public void setPaths(List<String> paths) {
-    this.paths = paths;
+  public void setPublicPaths(List<String> publicPaths) {
+    this.publicPaths = publicPaths;
   }
 }

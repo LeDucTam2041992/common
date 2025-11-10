@@ -67,7 +67,7 @@ public class HttpSecurityConfiguration {
       matchIfMissing = true)
   @Order(20)
   public HttpSecurityConfigurer publicPathConfig(PublicPathConfigProperties pathConfigProperties) {
-    return new PublicPathsSecurityConfigurer(pathConfigProperties.getPaths());
+    return new PublicPathsSecurityConfigurer(pathConfigProperties.getPublicPaths());
   }
 
   @Bean
