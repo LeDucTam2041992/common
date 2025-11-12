@@ -1,13 +1,9 @@
 package com.kpro.common.dto.base;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 public class ApiMessage {
 
-  @Schema(example = "SUCCESS")
   private String code;
 
-  @Schema(example = "SUCCESS")
   private String message;
 
   public ApiMessage() {}

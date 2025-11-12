@@ -62,7 +62,7 @@ public class HttpSecurityConfiguration {
 
   @Bean
   @ConditionalOnProperty(
-      name = "kpro.security.public-path.enable",
+      name = "kpro.security.public-url.enable",
       havingValue = "true",
       matchIfMissing = true)
   @Order(20)
