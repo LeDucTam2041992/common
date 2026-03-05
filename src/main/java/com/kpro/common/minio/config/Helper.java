@@ -81,9 +81,7 @@ public class Helper {
   }
 
   public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-    Map<Object, Boolean> map = new ConcurrentHashMap();
-    return (t) -> {
-      return map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    };
+    Map<Object, Boolean> map = new ConcurrentHashMap<>();
+    return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
 }

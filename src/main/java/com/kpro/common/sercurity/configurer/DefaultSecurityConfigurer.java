@@ -17,7 +17,7 @@ public class DefaultSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity
           //                    .addFilterBefore(filter, BasicAuthenticationFilter.class)
           .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

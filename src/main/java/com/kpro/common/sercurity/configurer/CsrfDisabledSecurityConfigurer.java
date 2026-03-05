@@ -13,10 +13,10 @@ public class CsrfDisabledSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity.csrf(AbstractHttpConfigurer::disable);
     } catch (Exception e) {
-      log.error("{} csrf security disable error {}", getClass().getSimpleName(), e);
+      log.error("[{}] csrf security disable error [{}]", getClass().getSimpleName(), e.getMessage());
     }
   }
 }

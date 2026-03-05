@@ -17,7 +17,7 @@ public class InternalHttpClientProperties {
   private long connectTimeout = 10;
   private int socketTimeOut = 15;
 
-  private long responseTimeout = 45;
+  private long responseTimeout = 50;
   private long connectionRequestTimeout = 5;
 
   private boolean evictExpiredConnections = true;

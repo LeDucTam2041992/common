@@ -72,7 +72,7 @@ public class HttpSecurityConfiguration {
 
   @Bean
   @Order(22)
-  public HttpSecurityConfigurer prometheusConfig() {
+  public HttpSecurityConfigurer prometheusSecurityConfig() {
     return new PrometheusSecurityConfigurer();
   }
 

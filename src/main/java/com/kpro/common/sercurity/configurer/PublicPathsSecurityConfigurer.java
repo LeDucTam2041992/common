@@ -22,13 +22,16 @@ public class PublicPathsSecurityConfigurer implements HttpSecurityConfigurer {
   public void configure(HttpSecurity httpSecurity) {
     if (!CollectionUtils.isEmpty(this.publicPaths)) {
       String[] arr = this.publicPaths.toArray(new String[this.publicPaths.size()]);
-      log.info("{} start create configurer: {}", getClass().getSimpleName(), arr);
+      log.info("[{}] start create configurer [{}]", getClass().getSimpleName(), arr);
       try {
         httpSecurity.authorizeHttpRequests(
             authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry.requestMatchers(arr).permitAll());
       } catch (Exception e) {
-        log.error("{} public paths security configurer error {}", getClass().getSimpleName(), e);
+        log.error(
+            "[{}] public paths security configurer error [{}]",
+            getClass().getSimpleName(),
+            e.getMessage());
       }
     }
   }

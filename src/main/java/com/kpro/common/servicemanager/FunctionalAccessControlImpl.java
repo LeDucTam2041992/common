@@ -33,7 +33,7 @@ public class FunctionalAccessControlImpl implements FunctionalAccessControl {
   public boolean doCheckPermission(
       String username, String resource, String function, String action) {
     log.info(
-        "{} check permission {} - {} - {}",
+        "[{}] check permission [{}] - [{}] - [{}]",
         getClass().getSimpleName(),
         username,
         resource,
@@ -57,18 +57,23 @@ public class FunctionalAccessControlImpl implements FunctionalAccessControl {
           ErrorResponse errorResponse =
               mapper.readValue(
                   clientResponseException.getResponseBodyAsByteArray(), ErrorResponse.class);
-          log.error("{} call check permission error {}", getClass().getSimpleName(), errorResponse);
+          log.error(
+              "[{}] call check permission error [{}]", getClass().getSimpleName(), errorResponse);
         } catch (IOException exception) {
-          log.error("{} read objectError error {}", getClass().getSimpleName(), exception);
+          log.error(
+              "[{}] read objectError error [{}]",
+              getClass().getSimpleName(),
+              exception.getMessage());
         }
       }
       log.error(
-          "{} call service manager error: http status [{}] - detail [{}]",
+          "[{}] call service manager error: http status [{}] - detail [{}]",
           getClass().getSimpleName(),
           clientResponseException.getStatusCode(),
           clientResponseException.getResponseBodyAsString());
     } catch (Exception e) {
-      log.error("{} check permission server error {}", getClass().getSimpleName(), e);
+      log.error(
+          "[{}] check permission server error [{}]", getClass().getSimpleName(), e.getMessage());
     }
     return false;
   }

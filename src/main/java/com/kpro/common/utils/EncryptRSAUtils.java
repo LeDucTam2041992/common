@@ -1,23 +1,12 @@
 package com.kpro.common.utils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -26,15 +15,18 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UtilityClass
 public class EncryptRSAUtils {
   private static final Logger log = LoggerFactory.getLogger(EncryptRSAUtils.class);
-  private static final String DEFAULT_DIR_PATH = "src/main/resources/";
-  private static final String RSA_ALGORITHM = "RSA";
+  private static final String RSA_ALGORITHM = "RSA/None/OAEPWITHSHA-256ANDMGF1PADDING";
+//  ECB -> for old version jdk, use None is modern
+//  private static final String RSA_ALGORITHM = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
 
-  public static String encryptRSA(String en) {
+  public static String encryptRSA(String message) {
     String strEncrypt = null;
     try {
       byte[] b =
@@ -45,9 +37,9 @@ public class EncryptRSAUtils {
       X509EncodedKeySpec spec = new X509EncodedKeySpec(b);
       KeyFactory factory = KeyFactory.getInstance("RSA");
       PublicKey pubKey = factory.generatePublic(spec);
-      Cipher c = Cipher.getInstance("RSA");
+      Cipher c = Cipher.getInstance(RSA_ALGORITHM);
       c.init(Cipher.ENCRYPT_MODE, pubKey);
-      byte[] encryptOut = c.doFinal(en.getBytes());
+      byte[] encryptOut = c.doFinal(message.getBytes());
       strEncrypt = Base64.getEncoder().encodeToString(encryptOut);
 
     } catch (Exception ex) {
@@ -56,10 +48,9 @@ public class EncryptRSAUtils {
     return strEncrypt;
   }
 
-  public static String decryptRSA(String de) {
+  public static String decryptRSA(String encryptMessage) {
     String strDecrypt = null;
     try {
-
       byte[] b =
           EncryptRSAUtils.class
               .getClassLoader()
@@ -70,14 +61,14 @@ public class EncryptRSAUtils {
       KeyFactory factory = KeyFactory.getInstance("RSA");
       PrivateKey priKey = factory.generatePrivate(spec);
 
-      Cipher c = Cipher.getInstance("RSA");
+      Cipher c = Cipher.getInstance(RSA_ALGORITHM);
       c.init(Cipher.DECRYPT_MODE, priKey);
 
-      byte[] decryptOut = c.doFinal(Base64.getDecoder().decode(de));
+      byte[] decryptOut = c.doFinal(Base64.getDecoder().decode(encryptMessage));
       strDecrypt = new String(decryptOut);
 
     } catch (Exception ex) {
-      log.error("{} decrypt error {}", EncryptRSAUtils.class.getSimpleName(), ex);
+      log.error("[{}] decrypt error [{}]", EncryptRSAUtils.class.getSimpleName(), ex.getMessage());
     }
     return strDecrypt;
   }
@@ -128,74 +119,5 @@ public class EncryptRSAUtils {
     PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
     KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
     return keyFactory.generatePrivate(spec);
-  }
-
-  public static void createRSAKey() {
-    createRSAKey(null);
-  }
-
-  public static void createRSAKey(String pathDir) {
-    if (pathDir == null) pathDir = DEFAULT_DIR_PATH;
-    String pathPubKey = pathDir.concat("publicKey.rsa");
-    String pathPriKey = pathDir.concat("privateKey.rsa");
-    try {
-      SecureRandom sr = new SecureRandom();
-      KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-      kpg.initialize(2048, sr);
-      KeyPair kp = kpg.genKeyPair();
-      PublicKey publicKey = kp.getPublic();
-      PrivateKey privateKey = kp.getPrivate();
-      File publicKeyFile = createKeyFile(new File(pathPubKey));
-      File privateKeyFile = createKeyFile(new File(pathPriKey));
-
-      try (FileOutputStream fosPub = new FileOutputStream(publicKeyFile);
-          FileOutputStream fosPri = new FileOutputStream(privateKeyFile)) {
-        fosPub.write(publicKey.getEncoded());
-        fosPri.write(privateKey.getEncoded());
-      }
-      log.info("Generate key successfully");
-    } catch (Exception e) {
-      log.error("{} generate key error {}", EncryptRSAUtils.class.getSimpleName(), e);
-    }
-  }
-
-  private static File createKeyFile(File file) throws IOException {
-    if (file.exists()) {
-      file.delete();
-    }
-    file.createNewFile();
-    return file;
-  }
-
-  public static void createRSAKeyAsString(String path)
-      throws NoSuchAlgorithmException, IOException {
-    if (path == null) path = "src/main/resources/rsa/";
-    SecureRandom sr = new SecureRandom();
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-    kpg.initialize(2048, sr);
-    KeyPair kp = kpg.genKeyPair();
-    PublicKey publicKey = kp.getPublic();
-    PrivateKey privateKey = kp.getPrivate();
-    String publicKeyStr = Base64.getEncoder().encodeToString(publicKey.getEncoded());
-    String privateKeyStr = Base64.getEncoder().encodeToString(privateKey.getEncoded());
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.concat("public_key_str")));
-        BufferedWriter writer2 =
-            new BufferedWriter(new FileWriter(path.concat("public_key_str")))) {
-      writer.write(publicKeyStr);
-      writer2.write(privateKeyStr);
-    }
-  }
-
-  private Path makeDir(String filePath) {
-    try {
-      Path path = Paths.get(filePath).toAbsolutePath().normalize();
-      if (!Files.exists(path)) {
-        Files.createDirectories(path);
-      }
-      return path;
-    } catch (Exception e) {
-      log.error("{} create dir error {}", EncryptRSAUtils.class.getSimpleName(), e);
-      throw new RuntimeException("Create dir error");
-    }
   }
 }

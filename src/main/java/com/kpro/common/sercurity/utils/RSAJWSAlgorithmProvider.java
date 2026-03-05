@@ -34,7 +34,7 @@ public class RSAJWSAlgorithmProvider implements JWSProvider {
       PublicKey publicKey = factory.generatePublic(spec);
       return new RSASSAVerifier((RSAPublicKey) publicKey);
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      log.error("{} get jws verifier error {}", getClass().getSimpleName(), e);
+      log.error("[{}] get jws verifier error [{}]", getClass().getSimpleName(), e.getMessage());
       throw new AuthenticationJwtException();
     }
   }
@@ -48,7 +48,7 @@ public class RSAJWSAlgorithmProvider implements JWSProvider {
       PrivateKey privateKey = factory.generatePrivate(spec);
       return new RSASSASigner(privateKey);
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      log.error("{} get signer error {}", getClass().getSimpleName(), e);
+      log.error("[{}] get signer error [{}]", getClass().getSimpleName(), e.getMessage());
       throw new AuthenticationJwtException();
     }
   }

@@ -13,13 +13,16 @@ public class StatelessSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity.sessionManagement(
           httpSecuritySessionManagementConfigurer ->
               httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
                   SessionCreationPolicy.STATELESS));
     } catch (Exception e) {
-      log.error("{} stateless security configurer error {}", getClass().getSimpleName(), e);
+      log.error(
+          "[{}] stateless security configurer error {}",
+          getClass().getSimpleName(),
+          e.getMessage());
     }
   }
 }

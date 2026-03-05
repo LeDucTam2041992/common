@@ -1,0 +1,51 @@
+FROM maven:3.9.4-eclipse-temurin-17-focal as build
+WORKDIR /app
+
+# COPY pom.xml và tải trước dependencies
+COPY pom.xml .
+RUN mvn -B -DskipTests dependency:resolve
+
+# COPY source code và build ứng dụng
+COPY src ./src
+RUN mvn -B -DskipTests clean package
+
+# Stage 2: runtime image
+FROM eclipse-temurin:17-jre-focal as prod
+
+LABEL org.opencontainers.image.title="permission-service" \
+      org.opencontainers.image.description="permission-service" \
+      org.opencontainers.image.vendor="Kproduct project" \
+      org.opencontainers.image.authors="TamLD <tamld@kproduct.vn>"
+
+# Tạo user không phải root
+RUN addgroup -S spring && adduser -S spring -G spring
+RUN groupadd -r spring && useradd -r -g spring spring
+
+WORKDIR /app
+
+RUN mkdir -p /app/tmp && chown -R spring:spring /app /app/tmp
+
+ARG JAR_FILE=target/*.jar
+COPY --from=build --chown=spring:spring /app/${JAR_FILE} app.jar
+
+USER spring
+
+ENV JAVA_TOOL_OPTIONS="\
+ -XX:+UseContainerSupport \
+ -XX:MaxRAMPercentage=75.0 \
+ -XX:+UseG1GC \
+ -XX:InitiatingHeapOccupancyPercent=35 \
+ -XX:+HeapDumpOnOutOfMemoryError \
+ -XX:HeapDumpPath=/app/tmp/heapdump.hprof \
+ -XX:+ExitOnOutOfMemoryError \
+ -Djava.security.egd=file:/dev/./urandom \
+ -Dfile.encoding=UTF-8"
+
+ENV SPRING_PROFILES_ACTIVE=""
+
+# OTEL_JAVA_AGENT="-javaagent:/app/opentelemetry-javaagent.jar"
+ENV OTEL_JAVA_AGENT=""
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_TOOL_OPTIONS $OTEL_JAVA_AGENT -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE -jar app.jar"]

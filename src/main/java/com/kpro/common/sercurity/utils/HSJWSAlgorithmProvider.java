@@ -23,7 +23,7 @@ public class HSJWSAlgorithmProvider implements JWSProvider {
     try {
       return new MACVerifier(algorithmConfig.getInternalKeySign());
     } catch (JOSEException e) {
-      log.error("{} get jws verifier error {}", getClass().getSimpleName(), e);
+      log.error("[{}] get jws verifier error [{}]", getClass().getSimpleName(), e.getMessage());
       throw new AuthenticationJwtException();
     }
   }
@@ -33,7 +33,7 @@ public class HSJWSAlgorithmProvider implements JWSProvider {
     try {
       return new MACSigner(algorithmConfig.getInternalKeySign());
     } catch (KeyLengthException e) {
-      log.error("{} get jws verifier error {}", getClass().getSimpleName(), e);
+      log.error("[{}] get jws verifier error [{}]", getClass().getSimpleName(), e.getMessage());
       throw new AuthenticationJwtException();
     }
   }
