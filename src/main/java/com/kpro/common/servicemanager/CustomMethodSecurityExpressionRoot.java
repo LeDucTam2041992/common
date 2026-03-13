@@ -1,5 +1,7 @@
 package com.kpro.common.servicemanager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -7,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
+    private static final Logger log =
+        LoggerFactory.getLogger(CustomMethodSecurityExpressionRoot.class);
     private final FunctionalAccessControl functionalAccessControl;
     private Object filterObject;
     private Object returnObject;
@@ -60,7 +64,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         return this.target;
     }
 
-    void setThis(Object target) {
+    public void setThis(Object target) {
         this.target = target;
     }
 }

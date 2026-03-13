@@ -11,13 +11,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
-@EnableConfigurationProperties(AccessControlConfig.class)
+@EnableConfigurationProperties(AccessControlProperties.class)
 public class CustomPermissionSecurityConfig {
 
   @Bean({"functionalAccessControlDefault"})
   @ConditionalOnMissingBean
   public FunctionalAccessControl functionalAccessControlDefault(
-      @Qualifier("interRestTemplate") RestTemplate interRestTemplate, AccessControlConfig config) {
+      @Qualifier("interRestTemplate") RestTemplate interRestTemplate,
+      AccessControlProperties config) {
     return new FunctionalAccessControlImpl(interRestTemplate, config.getUrlCheckPermission());
   }
 

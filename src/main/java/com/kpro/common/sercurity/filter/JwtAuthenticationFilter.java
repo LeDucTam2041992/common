@@ -38,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String jwt = getJwtFromRequest(request);
     if (jwt == null || notFilter(request)) {
-      log.info("Not filter public path [{}]", request.getRequestURI());
       filterChain.doFilter(request, response);
       return;
     }
@@ -50,13 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     SecurityContextHolder.getContext().setAuthentication(authentication);
     filterChain.doFilter(request, response);
   }
-
-  //    @Override
-  //    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-  //        log.info("Not filter public path [{}]", request.getRequestURI());
-  //        return excludedMatchers.stream()
-  //            .anyMatch(matcher -> matcher.matches(request));
-  //    }
 
   private boolean notFilter(HttpServletRequest request) {
     return excludedMatchers.stream().anyMatch(matcher -> matcher.matches(request));

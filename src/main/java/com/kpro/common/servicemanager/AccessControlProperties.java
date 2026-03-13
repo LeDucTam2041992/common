@@ -3,13 +3,13 @@ package com.kpro.common.servicemanager;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "kpro.security.access-control")
-public class AccessControlConfig {
+public class AccessControlProperties {
   private String urlCheckPermission =
-      "http://service-manager.default.cluster.svc.local:8080/api/permissions/check?permission={permission}&username={username}";
+      "permission-manager-service:80/api/permissions/check?permission={permission}&username={username}";
 
-  public AccessControlConfig() {}
+  public AccessControlProperties() {}
 
-  public AccessControlConfig(String urlCheckPermission) {
+  public AccessControlProperties(String urlCheckPermission) {
     this.urlCheckPermission = urlCheckPermission;
   }
 
