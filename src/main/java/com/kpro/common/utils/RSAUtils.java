@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @UtilityClass
-public class EncryptRSAUtils {
-  private static final Logger log = LoggerFactory.getLogger(EncryptRSAUtils.class);
+public class RSAUtils {
+  private static final Logger log = LoggerFactory.getLogger(RSAUtils.class);
   private static final String RSA_ALGORITHM = "RSA/None/OAEPWITHSHA-256ANDMGF1PADDING";
 //  ECB -> for old version jdk, use None is modern
 //  private static final String RSA_ALGORITHM = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
@@ -30,7 +30,7 @@ public class EncryptRSAUtils {
     String strEncrypt = null;
     try {
       byte[] b =
-          EncryptRSAUtils.class
+          RSAUtils.class
               .getClassLoader()
               .getResourceAsStream("publicKey.rsa")
               .readAllBytes();
@@ -52,7 +52,7 @@ public class EncryptRSAUtils {
     String strDecrypt = null;
     try {
       byte[] b =
-          EncryptRSAUtils.class
+          RSAUtils.class
               .getClassLoader()
               .getResourceAsStream("privateKey.rsa")
               .readAllBytes();
@@ -68,7 +68,7 @@ public class EncryptRSAUtils {
       strDecrypt = new String(decryptOut);
 
     } catch (Exception ex) {
-      log.error("[{}] decrypt error [{}]", EncryptRSAUtils.class.getSimpleName(), ex.getMessage());
+      log.error("[{}] decrypt error [{}]", RSAUtils.class.getSimpleName(), ex.getMessage());
     }
     return strDecrypt;
   }

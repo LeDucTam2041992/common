@@ -34,8 +34,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EncryptECCUtils {
-  private static final Logger log = LoggerFactory.getLogger(EncryptECCUtils.class);
+public class ECCUtils {
+  private static final Logger log = LoggerFactory.getLogger(ECCUtils.class);
 
   public static void main(String[] args)
       throws InvalidAlgorithmParameterException, IOException, NoSuchAlgorithmException,
