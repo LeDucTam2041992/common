@@ -41,13 +41,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
-    JWTClaimsSet claimsSet = tokenManager.validateInternalJwt(jwt);
-    String principal = claimsSet.getSubject();
-    UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(principal, null, null);
-    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    filterChain.doFilter(request, response);
+    try {
+      JWTClaimsSet claimsSet = tokenManager.validateInternalJwt(jwt);
+      String principal = claimsSet.getSubject();
+      UsernamePasswordAuthenticationToken authentication =
+          new UsernamePasswordAuthenticationToken(principal, null, null);
+      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      filterChain.doFilter(request, response);
+    } catch (Exception e) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+      response.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
+      response.setHeader("X-Error-Detail", e.getMessage());
+
+      // Set Content Type and Write Body
+//      response.setContentType("application/json");
+//      response.setCharacterEncoding("UTF-8");
+    }
   }
 
   private boolean notFilter(HttpServletRequest request) {
