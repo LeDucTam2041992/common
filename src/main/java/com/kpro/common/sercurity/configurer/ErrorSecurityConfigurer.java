@@ -11,7 +11,7 @@ public class ErrorSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity
           .authorizeHttpRequests(
               authorizationManagerRequestMatcherRegistry ->
@@ -24,7 +24,7 @@ public class ErrorSecurityConfigurer implements HttpSecurityConfigurer {
                         response.setHeader("WWW-Authenticate", "Bearer error=invalid_token");
                       }));
     } catch (Exception e) {
-      log.error("{} error security configurer error {}", getClass().getSimpleName(), e);
+      log.error("[{}] error security configurer error {}", getClass().getSimpleName(), e);
     }
   }
 }

@@ -19,7 +19,7 @@ public class CoreSecurityConfigurerAdapter {
   @Autowired private List<HttpSecurityConfigurer> configurers;
 
   public CoreSecurityConfigurerAdapter() {
-    log.info("{} start create core security config", getClass().getSimpleName());
+    log.info("[{}] start create core security config", getClass().getSimpleName());
   }
 
   public void setConfigurers(List<HttpSecurityConfigurer> configurers) {

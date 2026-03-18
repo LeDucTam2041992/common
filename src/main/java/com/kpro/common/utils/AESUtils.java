@@ -29,7 +29,7 @@ public class AESUtils {
   }
 
   public static String encrypt(String plainText, SecretKey key, byte[] iv) throws Exception {
-    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding"); //recommend use GCM padding
     GCMParameterSpec spec = new GCMParameterSpec(TAG_SIZE, iv);
     cipher.init(Cipher.ENCRYPT_MODE, key, spec);
     byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));

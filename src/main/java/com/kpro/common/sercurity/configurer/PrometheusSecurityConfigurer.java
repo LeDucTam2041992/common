@@ -19,7 +19,7 @@ public class PrometheusSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity.authorizeHttpRequests(
           authorizationManagerRequestMatcherRegistry ->
               authorizationManagerRequestMatcherRegistry
@@ -29,7 +29,7 @@ public class PrometheusSecurityConfigurer implements HttpSecurityConfigurer {
                       })
                   .permitAll());
     } catch (Exception e) {
-      log.error("{} actuator configurer error {}", getClass().getSimpleName(), e);
+      log.error("[{}] actuator configurer error {}", getClass().getSimpleName(), e);
     }
   }
 }

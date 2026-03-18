@@ -51,7 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
     } catch (Exception e) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
       response.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
       response.setHeader("X-Error-Detail", e.getMessage());
 

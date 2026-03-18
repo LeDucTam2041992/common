@@ -21,19 +21,13 @@ public class BaseException extends RuntimeException {
     this.errorCode = errorCode;
   }
 
-  public BaseException(KproErrorCode errorCode, Object... args) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
-    this.args = args;
-  }
-
   public BaseException(KproErrorCode errorCode, Object tag) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
     this.tag = tag;
   }
 
-  public BaseException(KproErrorCode errorCode, Object tag, Object... args) {
+  public BaseException(KproErrorCode errorCode, Object tag, Object[] args) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
     this.tag = tag;

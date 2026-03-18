@@ -12,17 +12,17 @@ public class InternalHttpClientProperties {
 
   private int maxConnTotal = 100;
   private int maxConnPerRoute = 20;
-  private long connTimeToLive = 15;
+  private long connTimeToLive = 5;
 
-  private long connectTimeout = 10;
-  private int socketTimeOut = 15;
+  private long connectTimeout = 8;
+  private int socketTimeOut = 5;
 
   private long responseTimeout = 50;
   private long connectionRequestTimeout = 5;
 
   private boolean evictExpiredConnections = true;
   private boolean evictIdleConnections = true;
-  private long maxIdleTime = 60;
+  private long maxIdleTime = 25;
   private boolean redirectHandlingDisable = false;
   private boolean contentCompressionDisable = false;
   private boolean automaticRetriesDisable = false;

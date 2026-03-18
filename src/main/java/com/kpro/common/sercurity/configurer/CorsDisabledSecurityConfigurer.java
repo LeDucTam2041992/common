@@ -13,10 +13,10 @@ public class CorsDisabledSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
-      log.info("{} start create configurer", getClass().getSimpleName());
+      log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity.cors(AbstractHttpConfigurer::disable);
     } catch (Exception e) {
-      log.error("{} cors security disable error {}", getClass().getSimpleName(), e);
+      log.error("[{}] cors security disable error {}", getClass().getSimpleName(), e);
     }
   }
 }
