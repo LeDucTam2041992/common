@@ -9,10 +9,10 @@ public class ApiResponseFactory {
   public static final String FAIL_CODE = "400";
 
   public static <T> BaseApiResponse<T> success(T resultObject) {
-    return gettBaseApiResponse(resultObject, SUCCESS_MESS, SUCCESS_CODE);
+    return toBaseApiResponse(resultObject, SUCCESS_MESS, SUCCESS_CODE);
   }
 
-  private static <T> BaseApiResponse<T> gettBaseApiResponse(
+  private static <T> BaseApiResponse<T> toBaseApiResponse(
       T resultObject, String successMess, String successCode) {
     BaseApiResponse<T> result = new BaseApiResponse<>();
     ApiMessage message = new ApiMessage();
@@ -25,6 +25,6 @@ public class ApiResponseFactory {
   }
 
   public static <T> BaseApiResponse<T> fail(T resultObject) {
-    return gettBaseApiResponse(resultObject, FAIL_MESS, FAIL_CODE);
+    return toBaseApiResponse(resultObject, FAIL_MESS, FAIL_CODE);
   }
 }
