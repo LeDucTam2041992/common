@@ -37,17 +37,27 @@ public class HttpSecurityConfiguration {
   private static final Logger log = LoggerFactory.getLogger(HttpSecurityConfiguration.class);
 
   public HttpSecurityConfiguration() {
-    log.info("{} start create security config", getClass().getSimpleName());
+    log.info("[{}] start create security config", getClass().getSimpleName());
   }
 
   @Bean
   @ConditionalOnProperty(
-      name = "kpro.security.error-config.enable",
+      name = "kpro.security.csrf.enable",
+      havingValue = "true",
+      matchIfMissing = true)
+  @Order(9)
+  public HttpSecurityConfigurer disableCsrfConfigurer() {
+    return new CsrfDisabledSecurityConfigurer();
+  }
+
+  @Bean
+  @ConditionalOnProperty(
+      name = "kpro.security.cors.enable",
       havingValue = "true",
       matchIfMissing = true)
   @Order(10)
-  public HttpSecurityConfigurer errorHttpSecurityConfig() {
-    return new ErrorSecurityConfigurer();
+  public HttpSecurityConfigurer disableCorsConfigurer() {
+    return new CorsDisabledSecurityConfigurer();
   }
 
   @Bean
@@ -55,9 +65,25 @@ public class HttpSecurityConfiguration {
       name = "kpro.security.stateless.enable",
       havingValue = "true",
       matchIfMissing = true)
-  @Order(15)
+  @Order(12)
   public HttpSecurityConfigurer statelessConfig() {
     return new StatelessSecurityConfigurer();
+  }
+
+  @Bean
+  @ConditionalOnProperty(
+      name = "kpro.security.error-config.enable",
+      havingValue = "true",
+      matchIfMissing = true)
+  @Order(13)
+  public HttpSecurityConfigurer errorHttpSecurityConfig() {
+    return new ErrorSecurityConfigurer();
+  }
+
+  @Bean
+  @Order(15)
+  public HttpSecurityConfigurer prometheusSecurityConfig() {
+    return new PrometheusSecurityConfigurer();
   }
 
   @Bean
@@ -71,40 +97,14 @@ public class HttpSecurityConfiguration {
   }
 
   @Bean
-  @Order(22)
-  public HttpSecurityConfigurer prometheusSecurityConfig() {
-    return new PrometheusSecurityConfigurer();
-  }
-
-  @Bean
   @ConditionalOnProperty(
       name = "kpro.security.default.enable",
       havingValue = "true",
       matchIfMissing = true)
-  @Order(50)
+  @Order(47)
   public HttpSecurityConfigurer defaultAuth(
       @Qualifier("jwtAuthenticationFilter") Filter jwtAuthenticationFilter) {
     return new DefaultSecurityConfigurer(jwtAuthenticationFilter);
-  }
-
-  @Bean
-  @ConditionalOnProperty(
-      name = "kpro.security.csrf.enable",
-      havingValue = "true",
-      matchIfMissing = true)
-  @Order(101)
-  public HttpSecurityConfigurer disableCsrfConfigurer() {
-    return new CsrfDisabledSecurityConfigurer();
-  }
-
-  @Bean
-  @ConditionalOnProperty(
-      name = "kpro.security.cors.enable",
-      havingValue = "true",
-      matchIfMissing = true)
-  @Order(100)
-  public HttpSecurityConfigurer disableCorsConfigurer() {
-    return new CorsDisabledSecurityConfigurer();
   }
 
   @Bean
