@@ -33,11 +33,12 @@ public class FunctionalAccessControlImpl implements FunctionalAccessControl {
   public boolean doCheckPermission(
       String username, String resource, String function, String action) {
     log.info(
-        "[{}] check permission [{}] - [{}] - [{}]",
+        "[{}] check permission [{}] - [{}] - [{}] - [{}]",
         getClass().getSimpleName(),
         username,
         resource,
-        function);
+        function,
+        action);
     if (username == null || resource == null || function == null) return false;
     try {
       String urlCheck = UriComponentsBuilder.fromHttpUrl(urlCheckPermission).encode().toUriString();
