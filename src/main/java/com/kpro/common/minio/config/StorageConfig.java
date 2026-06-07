@@ -59,15 +59,15 @@ public class StorageConfig {
           client.getBucketAccelerateConfiguration(
               new GetBucketAccelerateConfigurationRequest(bucketName));
       if (!bucketAccelerateConfiguration.isAccelerateEnabled()) {
-        log.warn("Bucket '{}' transfer acceleration is suspended.", bucketName);
+        log.warn("Bucket [{}] transfer acceleration is suspended.", bucketName);
       }
 
       client.setBucketAccelerateConfiguration(
           bucketName, new BucketAccelerateConfiguration(BucketAccelerateStatus.Enabled));
-      log.info("Bucket '{}' transfer acceleration is enabled.", bucketName);
+      log.info("Bucket [{}] transfer acceleration is enabled.", bucketName);
     } catch (AmazonS3Exception var3) {
       log.error(
-          "Error happened while checking and enabling transfer acceleration for bucket '{}': {}.",
+          "Error happened while checking and enabling transfer acceleration for bucket [{}]: [{}]",
           bucketName,
           var3.getMessage());
     }

@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FileHandlerUtils {
-  private static final Logger log = LoggerFactory.getLogger(FileHandlerUtils.class);
 
   private FileHandlerUtils() {
     throw new IllegalStateException("Utility class");
