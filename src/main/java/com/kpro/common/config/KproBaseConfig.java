@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
       "com.kpro.common.communication",
       "com.kpro.common.servicemanager",
       "com.kpro.common.exception",
-      "com.kpro.common.entity",
+      "com.kpro.common.persistence.config",
       "com.kpro.common.minio",
       "com.kpro.common.locale",
     })
