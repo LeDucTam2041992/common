@@ -1,10 +1,16 @@
 package com.kpro.common.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,7 +22,7 @@ public class AESUtils {
   private static final int IV_SIZE = 12; // bytes (96 bits)
   private static final int TAG_SIZE = 128; // bits
 
-  public static SecretKey generateKey() throws Exception {
+  public static SecretKey generateKey() throws NoSuchAlgorithmException {
     KeyGenerator keyGen = KeyGenerator.getInstance("AES");
     keyGen.init(KEY_SIZE);
     return keyGen.generateKey();
@@ -28,15 +34,19 @@ public class AESUtils {
     return iv;
   }
 
-  public static String encrypt(String plainText, SecretKey key, byte[] iv) throws Exception {
-    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding"); //recommend use GCM padding
+  public static String encrypt(String plainText, SecretKey key, byte[] iv)
+      throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+          InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding"); // recommend use GCM padding
     GCMParameterSpec spec = new GCMParameterSpec(TAG_SIZE, iv);
     cipher.init(Cipher.ENCRYPT_MODE, key, spec);
     byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
     return Base64.getEncoder().encodeToString(encrypted);
   }
 
-  public static String decrypt(String cipherText, SecretKey key, byte[] iv) throws Exception {
+  public static String decrypt(String cipherText, SecretKey key, byte[] iv)
+      throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+          InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
     Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
     GCMParameterSpec spec = new GCMParameterSpec(TAG_SIZE, iv);
     cipher.init(Cipher.DECRYPT_MODE, key, spec);

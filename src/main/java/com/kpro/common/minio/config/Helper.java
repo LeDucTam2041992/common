@@ -26,11 +26,7 @@ public class Helper {
     StringBuilder sb = new StringBuilder(maxLength);
 
     for (int i = 0; i < maxLength; ++i) {
-      sb.append(
-          "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-              .charAt(
-                  rnd.nextInt(
-                      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".length())));
+      sb.append(AB.charAt(rnd.nextInt(AB.length())));
     }
 
     return sb.toString();

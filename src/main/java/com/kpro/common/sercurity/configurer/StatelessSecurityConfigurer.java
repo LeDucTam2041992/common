@@ -8,8 +8,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class StatelessSecurityConfigurer implements HttpSecurityConfigurer {
   private static final Logger log = LoggerFactory.getLogger(StatelessSecurityConfigurer.class);
 
-  public StatelessSecurityConfigurer() {}
-
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {

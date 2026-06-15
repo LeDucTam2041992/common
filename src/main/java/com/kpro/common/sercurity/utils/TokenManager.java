@@ -1,6 +1,7 @@
 package com.kpro.common.sercurity.utils;
 
 import com.kpro.common.exception.KproCommonErrorCode;
+import com.kpro.common.sercurity.UserPrincipal;
 import com.kpro.common.sercurity.exception.AuthenticationJwtException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -42,8 +43,7 @@ public class TokenManager {
       signedJWT = SignedJWT.parse(jwt);
       JWSVerifier verifier = jwsProvider.getVerifier();
       if (!signedJWT.verify(verifier)) {
-        throw new AuthenticationJwtException(
-            KproCommonErrorCode.TOKEN_INVALID, "Token sign invalid");
+        throw new AuthenticationJwtException(KproCommonErrorCode.TOKEN_INVALID);
       }
       jwtClaimsSet = signedJWT.getJWTClaimsSet();
       DefaultJWTClaimsVerifier<SecurityContext> claimsVerifier =
@@ -65,8 +65,7 @@ public class TokenManager {
     return jwtClaimsSet;
   }
 
-  public String generateInternalJwt(String sub, Map<String, Object> claims)
-      throws JOSEException {
+  public String generateInternalJwt(String sub, Map<String, Object> claims) throws JOSEException {
     long currentTime = System.currentTimeMillis();
     var jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
     jwtClaimsSetBuilder
@@ -86,8 +85,8 @@ public class TokenManager {
     return signedJWT.serialize();
   }
 
-  public String getUsernameFromAuth() {
+  public UserPrincipal getUserPrincipalFromAuth() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return (String) authentication.getPrincipal();
+    return (UserPrincipal) authentication.getPrincipal();
   }
 }

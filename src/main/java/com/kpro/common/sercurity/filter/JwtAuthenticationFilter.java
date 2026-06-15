@@ -1,5 +1,6 @@
 package com.kpro.common.sercurity.filter;
 
+import com.kpro.common.sercurity.UserPrincipal;
 import com.kpro.common.sercurity.config.PublicPathConfigProperties;
 import com.kpro.common.sercurity.utils.TokenManager;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     try {
       JWTClaimsSet claimsSet = tokenManager.validateInternalJwt(jwt);
-      String principal = claimsSet.getSubject();
+      UserPrincipal principal = UserPrincipal.from(claimsSet);
       UsernamePasswordAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(principal, null, null);
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -53,10 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
       response.setHeader("X-Error-Detail", e.getMessage());
-
-      // Set Content Type and Write Body
-//      response.setContentType("application/json");
-//      response.setCharacterEncoding("UTF-8");
     }
   }
 

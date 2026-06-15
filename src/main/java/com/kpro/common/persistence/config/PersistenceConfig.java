@@ -1,5 +1,6 @@
 package com.kpro.common.persistence.config;
 
+import com.kpro.common.sercurity.UserPrincipal;
 import java.util.Optional;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Configuration
 @ConditionalOnClass(name = "jakarta.persistence.EntityListeners")
@@ -30,8 +30,8 @@ public class PersistenceConfig {
           .filter(auth -> auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken))
           .map(auth -> {
             Object principal = auth.getPrincipal();
-            if (principal instanceof UserDetails userDetails) {
-              return userDetails.getUsername();
+            if (principal instanceof UserPrincipal userPrincipal) {
+              return userPrincipal.getUserId();
             }
             return principal.toString();
           })

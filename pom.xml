@@ -5,7 +5,8 @@
 
 	<groupId>com.kpro</groupId>
 	<artifactId>common</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+<!--	<version>0.0.2-SNAPSHOT</version>-->
+	<version>0.0.3-SNAPSHOT</version>
 	<name>common</name>
 	<description>Demo project for Spring Boot</description>
 

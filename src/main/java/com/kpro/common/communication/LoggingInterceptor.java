@@ -15,7 +15,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.StreamUtils;
 
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
-  private static final Logger log = LoggerFactory.getLogger(LoggerFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
   private static final int MAX_LENGTH_BODY = 800;
 
   @Override

@@ -1,6 +1,7 @@
 package com.kpro.common.sercurity;
 
 import com.kpro.common.sercurity.config.PublicPathConfigProperties;
+import com.kpro.common.sercurity.configurer.CorsDefaultSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.CorsDisabledSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.CsrfDisabledSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.DefaultSecurityConfigurer;
@@ -52,12 +53,19 @@ public class HttpSecurityConfiguration {
 
   @Bean
   @ConditionalOnProperty(
-      name = "kpro.security.cors.enable",
-      havingValue = "true",
+      name = "kpro.security.cors.mode",
+      havingValue = "disable",
       matchIfMissing = true)
   @Order(10)
   public HttpSecurityConfigurer disableCorsConfigurer() {
     return new CorsDisabledSecurityConfigurer();
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "kpro.security.cors.mode", havingValue = "default")
+  @Order(11)
+  public HttpSecurityConfigurer defaultCorsConfigurer() {
+    return new CorsDefaultSecurityConfigurer();
   }
 
   @Bean
@@ -114,7 +122,7 @@ public class HttpSecurityConfiguration {
       matchIfMissing = true)
   @Qualifier("jWSProvider")
   @Order(42)
-  public JWSProvider HSJWSProvider(JwtAlgorithmConfig algorithmConfig) {
+  public JWSProvider hsJwsProvider(JwtAlgorithmConfig algorithmConfig) {
     return new HSJWSAlgorithmProvider(algorithmConfig);
   }
 
@@ -122,7 +130,7 @@ public class HttpSecurityConfiguration {
   @ConditionalOnProperty(name = "kpro.security.jwt.config.algorithm", havingValue = "RSA")
   @Qualifier("jWSProvider")
   @Order(43)
-  public JWSProvider RSAJWSProvider(JwtAlgorithmConfig algorithmConfig) {
+  public JWSProvider rsaJwsProvider(JwtAlgorithmConfig algorithmConfig) {
     return new RSAJWSAlgorithmProvider(algorithmConfig);
   }
 

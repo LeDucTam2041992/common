@@ -1,7 +1,9 @@
 package com.kpro.common.dto.base;
 
 import java.util.Collections;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class ApiResponseFactory {
   public static final String SUCCESS_MESS = "SUCCESS";
   public static final String SUCCESS_CODE = "200";

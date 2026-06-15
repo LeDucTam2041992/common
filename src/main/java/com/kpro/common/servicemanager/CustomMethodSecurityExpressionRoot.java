@@ -1,5 +1,6 @@
 package com.kpro.common.servicemanager;
 
+import com.kpro.common.sercurity.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -30,10 +31,11 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
             if (authentication instanceof AnonymousAuthenticationToken) {
                 return false;
             } else {
-                if (!(authentication.getPrincipal() instanceof String)) {
+                if (authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
+                    username = userPrincipal.getUserId();
+                } else {
                     return false;
                 }
-                username = (String) this.getAuthentication().getPrincipal();
             }
         }
         return this.functionalAccessControl.doCheckPermission(username, resource, function, action);

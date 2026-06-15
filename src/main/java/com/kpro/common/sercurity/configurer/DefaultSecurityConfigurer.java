@@ -19,7 +19,6 @@ public class DefaultSecurityConfigurer implements HttpSecurityConfigurer {
     try {
       log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity
-          //                    .addFilterBefore(filter, BasicAuthenticationFilter.class)
           .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
           .authorizeHttpRequests(
               authorizationManagerRequestMatcherRegistry ->

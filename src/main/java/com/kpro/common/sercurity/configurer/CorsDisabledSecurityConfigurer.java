@@ -8,15 +8,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class CorsDisabledSecurityConfigurer implements HttpSecurityConfigurer {
   private static final Logger log = LoggerFactory.getLogger(CorsDisabledSecurityConfigurer.class);
 
-  public CorsDisabledSecurityConfigurer() {}
-
   @Override
   public void configure(HttpSecurity httpSecurity) {
     try {
       log.info("[{}] start create configurer", getClass().getSimpleName());
       httpSecurity.cors(AbstractHttpConfigurer::disable);
     } catch (Exception e) {
-      log.error("[{}] cors security disable error {}", getClass().getSimpleName(), e);
+      log.error("[{}] cors security disable error [{}]", getClass().getSimpleName(), e);
     }
   }
 }
