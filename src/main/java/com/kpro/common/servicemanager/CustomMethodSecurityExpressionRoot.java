@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,14 +27,10 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             username = userDetails.getUsername();
         } else {
-            if (authentication instanceof AnonymousAuthenticationToken) {
-                return false;
+            if (authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
+                username = userPrincipal.getUserId();
             } else {
-                if (authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
-                    username = userPrincipal.getUserId();
-                } else {
-                    return false;
-                }
+                return false;
             }
         }
         return this.functionalAccessControl.doCheckPermission(username, resource, function, action);

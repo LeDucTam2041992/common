@@ -13,7 +13,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class ActuatorSecurityConfigurer implements HttpSecurityConfigurer {
   private static final Logger log = LoggerFactory.getLogger(ActuatorSecurityConfigurer.class);
 
-  @Value("${management.security.roles:ACTUATOR")
+  @Value("${management.security.roles:ACTUATOR}")
   private final List<String> actuatorsRole = Collections.singletonList("ACTUATOR");
 
   @Override

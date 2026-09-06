@@ -12,6 +12,7 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +41,11 @@ public class CommunicationConfig {
   }
 
   @LoadBalanced
-  @Bean
+  @Bean("interRestTemplate")
+  @ConditionalOnProperty(
+      name = "kpro.http.inter.load-balancer.enabled",
+      havingValue = "true"
+  )
   public RestTemplate interRestTemplate(
       @Qualifier("internalHttpRequestFactory") ClientHttpRequestFactory internalHttpRequestFactory,
       @Qualifier("interClientRequestInterceptor")
@@ -48,6 +53,32 @@ public class CommunicationConfig {
       @Qualifier("internalRestTemplateCustomizer")
           List<InternalRestTemplateCustomizer> internalRestTemplateCustomizers) {
 
+    return getRestTemplate(internalHttpRequestFactory, clientHttpRequestInterceptors,
+        internalRestTemplateCustomizers);
+  }
+
+  @Bean("interRestTemplate")
+  @ConditionalOnProperty(
+      name = "kpro.http.inter.load-balancer.enabled",
+      havingValue = "false",
+      matchIfMissing = true
+  )
+  public RestTemplate loadBalancedRestTemplate(
+      @Qualifier("internalHttpRequestFactory") ClientHttpRequestFactory internalHttpRequestFactory,
+      @Qualifier("interClientRequestInterceptor")
+          List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors,
+      @Qualifier("internalRestTemplateCustomizer")
+          List<InternalRestTemplateCustomizer> internalRestTemplateCustomizers) {
+
+    return getRestTemplate(internalHttpRequestFactory, clientHttpRequestInterceptors,
+        internalRestTemplateCustomizers);
+  }
+
+  @NotNull
+  private RestTemplate getRestTemplate(
+      @Qualifier("internalHttpRequestFactory") ClientHttpRequestFactory internalHttpRequestFactory,
+      @Qualifier("interClientRequestInterceptor") List<ClientHttpRequestInterceptor> clientHttpRequestInterceptors,
+      @Qualifier("internalRestTemplateCustomizer") List<InternalRestTemplateCustomizer> internalRestTemplateCustomizers) {
     if (clientHttpRequestInterceptors != null && !clientHttpRequestInterceptors.isEmpty()) {
       clientHttpRequestInterceptors.forEach(
           e ->

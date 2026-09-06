@@ -133,7 +133,7 @@ public class ECCUtils {
     byte[] sessionKeyBytes = Arrays.copyOfRange(digest, 0, AES_KEY_SIZE_BYTES);
     SecretKey secretKey = new SecretKeySpec(sessionKeyBytes, "AES");
 
-    // Sử dụng thuật toán AES tiêu chuẩn với chế độ CBC
+    // Sử dụng thuật toán AES tiêu chuẩn với chế độ GCM
     Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
     cipher.init(mode, secretKey, ivSpec);
 

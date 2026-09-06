@@ -16,6 +16,10 @@ public class BaseException extends RuntimeException {
 
   public BaseException() {}
 
+  public BaseException(String message) {
+    super(message);
+  }
+
   public BaseException(KproErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
@@ -27,11 +31,17 @@ public class BaseException extends RuntimeException {
     this.tag = tag;
   }
 
-  public BaseException(KproErrorCode errorCode, Object tag, Object[] args) {
+  public BaseException(KproErrorCode errorCode, Object tag, Object... args) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
     this.tag = tag;
-    this.args = args;
+    this.args = args != null ? args.clone() : new Object[0];
+  }
+
+  public BaseException(KproErrorCode errorCode, Throwable cause, Object... args) {
+    super(errorCode.getMessage(), cause);
+    this.errorCode = getErrorCode();
+    this.args = args != null ? args.clone() : new Object[0];
   }
 
   public KproErrorCode getErrorCode() {
@@ -43,7 +53,7 @@ public class BaseException extends RuntimeException {
   }
 
   public Object[] getArgs() {
-    return args;
+    return args.clone();
   }
 
   public void setArgs(Object[] args) {

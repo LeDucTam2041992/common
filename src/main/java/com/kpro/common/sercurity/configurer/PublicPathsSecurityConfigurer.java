@@ -21,7 +21,7 @@ public class PublicPathsSecurityConfigurer implements HttpSecurityConfigurer {
   @Override
   public void configure(HttpSecurity httpSecurity) {
     if (!CollectionUtils.isEmpty(this.publicPaths)) {
-      String[] arr = this.publicPaths.toArray(new String[this.publicPaths.size()]);
+      String[] arr = this.publicPaths.toArray(new String[0]);
       log.info("[{}] start create configurer [{}]", getClass().getSimpleName(), arr);
       try {
         httpSecurity.authorizeHttpRequests(

@@ -1,6 +1,7 @@
 package com.kpro.common.sercurity;
 
 import com.kpro.common.sercurity.config.PublicPathConfigProperties;
+import com.kpro.common.sercurity.configurer.ActuatorSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.CorsDefaultSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.CorsDisabledSecurityConfigurer;
 import com.kpro.common.sercurity.configurer.CsrfDisabledSecurityConfigurer;
@@ -86,6 +87,12 @@ public class HttpSecurityConfiguration {
   @Order(13)
   public HttpSecurityConfigurer errorHttpSecurityConfig() {
     return new ErrorSecurityConfigurer();
+  }
+
+  @Bean
+  @Order(14)
+  public HttpSecurityConfigurer actuatorHttpSecurityConfig() {
+    return new ActuatorSecurityConfigurer();
   }
 
   @Bean
