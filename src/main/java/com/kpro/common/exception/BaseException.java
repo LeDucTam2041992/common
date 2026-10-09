@@ -53,7 +53,7 @@ public class BaseException extends RuntimeException {
   }
 
   public Object[] getArgs() {
-    return args.clone();
+    return args != null ? args.clone() : null;
   }
 
   public void setArgs(Object[] args) {

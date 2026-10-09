@@ -13,5 +13,6 @@ import org.springframework.context.annotation.Configuration;
       "com.kpro.common.persistence.config",
       "com.kpro.common.minio",
       "com.kpro.common.locale",
+      "com.kpro.common.log",
     })
 public class KproBaseConfig {}
